@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17.0.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.js"></script>
+    <script type="text/babel">
+        const App = () => {
+            const [todos, setTodos] = React.useState([])
+            const [isLoading, setLoading] = React.useState(false)
+
+            React.useEffect(() => {
+                setLoading(true)
+                fetch("http://localhost:8080/articles")
+                    .then((res) => res.json())
+                    .then((data) => {
+                        setTodos(data);
+                        setLoading(false);
+                    })
+            }, [])
+
+            console.log(isLoading)
+
+            // set components
+            return (
+                <div>
+                    {todos.map((todo) => (
+                        <div>
+                            <p>{todo.id}</p>
+                            <p>{todo.title}</p>
+                            <p>{todo.body}</p>
+                            <p>{todo.tags}</p>
+                            <p>{todo.author}</p>
+                        </div>
+                    ))}
+                </div>
+            )
+        }
+
+        // render DOM
+        const rootElement = document.getElementById("root")
+        ReactDOM.render(<App />, rootElement)
+    </script>
+</body>
+
+</html>
